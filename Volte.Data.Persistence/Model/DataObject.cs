@@ -10,7 +10,7 @@ namespace Volte.Data.Dapper
     public class DataObject : IDataObject, ICloneable
     {
 
-        [Object(Indexes = true)]
+        [Object(Indexes = true, PrimaryKey = true)]
         public string sKey { get; set; }
         [Object(Indexes = true)]
         public string sCorporation { get; set; }

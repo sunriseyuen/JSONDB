@@ -35,17 +35,18 @@ namespace ConsoleApp2
             {
                 i++;
                 Console.WriteLine(i+"  ---->  "+x.Id);
+                int doc = (await startupRunner.DeleteEntity<Person>(x));
+                Console.WriteLine("delete = " + doc);
             }
-
             startupRunner.BeginTransaction();
 
             for (int ndx = 0; ndx < 10; ndx++)
             {
                 Person vPerson = new Person();
                 int doc=(await startupRunner.AddNewEntity<Person>(vPerson));
+                Console.WriteLine("i = " + ndx);
 
-                Console.WriteLine("x = "+ doc);
-                Console.WriteLine("i = "+ndx);
+                Console.WriteLine("insert = "+ doc);
             }
 
             startupRunner.Writeable = true;
