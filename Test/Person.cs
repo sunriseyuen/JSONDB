@@ -5,6 +5,7 @@ using Volte.Data.Dapper;
 
 namespace ConsoleApp2
 {
+    [Object(TableName = "person")]
     public class Person : DataObject
     {
         public Person()

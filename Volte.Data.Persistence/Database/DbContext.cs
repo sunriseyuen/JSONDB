@@ -66,11 +66,10 @@ namespace Volte.Data.Dapper
         /// <returns></returns>
         public async Task<int> AddNewEntity<T>(IDataObject entity) where T : class, new()
         {
-            Query query;
-            query = new Query("person");
+            ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
+            Query query = new Query(_ObjectProperty.TableName);
 
             var defaultValues = new Dictionary<string, object>();
-            ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
             foreach (var item in _ObjectProperty.Property)
             {
                 if (item.Indexes)
@@ -147,8 +146,8 @@ namespace Volte.Data.Dapper
         /// <returns></returns>
         public async Task<IEnumerable<T>> Query<T>() where T : class
         {
-            Query query;
-            query = new Query("xxxxxx");
+            ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
+            Query query = new Query(_ObjectProperty.TableName);
 
             SqlResult sqlResult = _connectionProvider.Compiler.Compile(query);
 
@@ -165,8 +164,8 @@ namespace Volte.Data.Dapper
         /// <returns></returns>
         public async Task<T> SingleOrDefault<T>() where T : class
         {
-            Query query;
-            query = new Query("xxxxxx");
+            ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
+            Query query = new Query(_ObjectProperty.TableName);
 
             SqlResult sqlResult = _connectionProvider.Compiler.Compile(query);
 
