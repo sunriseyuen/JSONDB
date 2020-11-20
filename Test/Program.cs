@@ -30,10 +30,13 @@ namespace ConsoleApp2
             var startupRunner = svc.GetRequiredService<IDbContext>();
             startupRunner.Open("master");
             var docs = await startupRunner.Query<Person>();
+            int i = 0;
             foreach (var x in docs)
             {
-                Console.WriteLine(x.Id);
+                i++;
+                Console.WriteLine(i+"  ---->  "+x.Id);
             }
+
             startupRunner.BeginTransaction();
 
             for (int ndx = 0; ndx < 10; ndx++)
