@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Volte.Data.Dapper
 {
-    public abstract class DataObject : IDataObject, ICloneable
+    public class DataObject : IDataObject, ICloneable
     {
 
         [Object(Indexes = true)]

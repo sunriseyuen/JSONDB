@@ -136,11 +136,12 @@ namespace Volte.Data.Dapper
 
             SqlResult sqlResult = _connectionProvider.Compiler.Compile(query);
 
-            var result = (await _connectionProvider.Connection.QueryAsync<T>(sqlResult.Sql,
+            var documents = (await _connectionProvider.Connection.QueryAsync<DataObject>(sqlResult.Sql,
                 sqlResult.NamedBindings,
                 _Transaction,
                 this.CommandTimeout));
-            return result;
+
+            return documents.Select(d => _serializer.Deserialize<T>(d.Contents));
         }
         /// <summary>
         /// 获取默认一条数据
