@@ -147,12 +147,6 @@ namespace Volte.Data.Dapper
               this.CommandTimeout));
             return result;
         }
-
-        /// <summary>
-        /// 查询列表
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         public async Task<IEnumerable<T>> Query<T>() where T : class
         {
             ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
@@ -167,11 +161,6 @@ namespace Volte.Data.Dapper
 
             return documents.Select(d => _serializer.Deserialize<T>(d.Contents));
         }
-        /// <summary>
-        /// 获取默认一条数据
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         public async Task<T> SingleOrDefault<T>() where T : class
         {
             ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
@@ -204,9 +193,7 @@ namespace Volte.Data.Dapper
         }
         public void BeginTransaction()
         {
-
             _Transaction = _connectionProvider.Connection.BeginTransaction();
-
         }
 
         public void Commit()
