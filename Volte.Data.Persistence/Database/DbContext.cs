@@ -88,33 +88,57 @@ namespace Volte.Data.Dapper
             
             return result;
         }
-        public async Task<bool> UpdateEntity<T>(IDataObject entity) where T : class, new()
+        public async Task<bool> DeleteEntity<T>(IDataObject entity) where T : class, new()
         {
-            Query query; 
-            query = new Query("xxxxxx");
-
-            var defaultValues = new Dictionary<string, object>();
-
-            bool HashContents = false;
             ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
+            Query query = new Query(_ObjectProperty.TableName);
+
             foreach (var item in _ObjectProperty.Property)
             {
-                if (item.Indexes)
+                if (item.PrimaryKey)
                 {
                     var otherProp = typeof(T).GetProperty(item.ColumnName);
                     var value = otherProp.GetValue(entity, null);
-                    defaultValues.Add(item.ColumnName, value);
-                }
-                if (item.ColumnName == "Contents")
-                {
-                    HashContents = true;
+                    query.Where(item.ColumnName, value);
                 }
             }
-            if (HashContents)
-            {
-                Serializer.JsonSerializer serializer = new Serializer.JsonSerializer();
 
-                defaultValues["Contents"] = serializer.Serialize(entity);
+            SqlResult sqlResult = _connectionProvider.Compiler.Compile(query.AsDelete());
+            var result = (await _connectionProvider.Connection.ExecuteAsync(sqlResult.Sql,
+              sqlResult.NamedBindings,
+              _Transaction,
+              this.CommandTimeout));
+            return result > 0;
+        }
+
+        public async Task<bool> UpdateEntity<T>(IDataObject entity) where T : class, new()
+        {
+            ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
+            Query query = new Query(_ObjectProperty.TableName);
+
+            var defaultValues = new Dictionary<string, object>();
+
+            foreach (var item in _ObjectProperty.Property)
+            {
+                if (item.Indexes || item.PrimaryKey)
+                {
+                    var otherProp = typeof(T).GetProperty(item.ColumnName);
+                    var value = otherProp.GetValue(entity, null);
+                    if (item.Indexes)
+                    {
+                        defaultValues.Add(item.ColumnName, value);
+                    }
+                    if (item.PrimaryKey)
+                    {
+                        query.Where(item.ColumnName, value);
+                    }
+                }
+                if (item.ColumnName == JSON_FIELD_NAME)
+                {
+                    Serializer.JsonSerializer serializer = new Serializer.JsonSerializer();
+
+                    defaultValues[JSON_FIELD_NAME] = serializer.Serialize(entity);
+                }
             }
             SqlResult sqlResult = _connectionProvider.Compiler.Compile(query.AsUpdate(defaultValues));
             var result = (await _connectionProvider.Connection.ExecuteAsync(sqlResult.Sql,
