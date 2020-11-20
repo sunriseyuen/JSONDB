@@ -48,7 +48,16 @@ namespace ConsoleApp2
 
                 Console.WriteLine("insert = "+ doc);
             }
-
+            docs = await startupRunner.Query<Person>();
+            i = 0;
+            foreach (var x in docs)
+            {
+                i++;
+                Console.WriteLine(i + "  ---->  " + x.Id);
+                x.Name = "update " + i;
+                int doc = (await startupRunner.UpdateEntity<Person>(x));
+                Console.WriteLine("update = " + doc);
+            }
             startupRunner.Writeable = true;
             startupRunner.Commit();
             Console.WriteLine("OK,press any key to exit");

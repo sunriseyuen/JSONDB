@@ -16,7 +16,7 @@ namespace Volte.Data.Dapper
         void Commit();
         void RollBack();
         Task<int> AddNewEntity<T>(IDataObject entity) where T : class, new();
-        Task<bool> UpdateEntity<T>(IDataObject entity) where T : class, new();
+        Task<int> UpdateEntity<T>(IDataObject entity) where T : class, new();
         Task<int> DeleteEntity<T>(IDataObject entity) where T : class, new();
         Task<IEnumerable<T>> Query<T>() where T : class;
         Task<T> SingleOrDefault<T>() where T : class;

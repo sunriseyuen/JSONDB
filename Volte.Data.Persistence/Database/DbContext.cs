@@ -111,7 +111,7 @@ namespace Volte.Data.Dapper
             return result;
         }
 
-        public async Task<bool> UpdateEntity<T>(IDataObject entity) where T : class, new()
+        public async Task<int> UpdateEntity<T>(IDataObject entity) where T : class, new()
         {
             ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
             Query query = new Query(_ObjectProperty.TableName);
@@ -145,7 +145,7 @@ namespace Volte.Data.Dapper
               sqlResult.NamedBindings,
               _Transaction,
               this.CommandTimeout));
-            return result > 0;
+            return result;
         }
 
         /// <summary>
