@@ -58,7 +58,7 @@ namespace Volte.Data.Dapper
             }
             this.Dispose();
         }
-        public async Task<int> AddNewEntity<T>(IDataObject entity) where T : class, new()
+        public async Task<int> AddNew<T>(IDataObject entity) where T : class, new()
         {
             ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
             Query query = new Query(_ObjectProperty.TableName);
@@ -88,7 +88,7 @@ namespace Volte.Data.Dapper
             
             return result;
         }
-        public async Task<int> DeleteEntity<T>(IDataObject entity) where T : class, new()
+        public async Task<int> Delete<T>(IDataObject entity) where T : class, new()
         {
             ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
             Query query = new Query(_ObjectProperty.TableName);
@@ -111,7 +111,7 @@ namespace Volte.Data.Dapper
             return result;
         }
 
-        public async Task<int> UpdateEntity<T>(IDataObject entity) where T : class, new()
+        public async Task<int> Update<T>(IDataObject entity) where T : class, new()
         {
             ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
             Query query = new Query(_ObjectProperty.TableName);
@@ -176,6 +176,7 @@ namespace Volte.Data.Dapper
         {
             ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
             Query query = new Query(_ObjectProperty.TableName);
+            query.Limit(1);
 
             SqlResult sqlResult = _connectionProvider.Compiler.Compile(query);
 

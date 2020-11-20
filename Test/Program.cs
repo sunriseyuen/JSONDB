@@ -35,7 +35,7 @@ namespace ConsoleApp2
             {
                 i++;
                 Console.WriteLine(i+"  ---->  "+x.Id);
-                int doc = (await startupRunner.DeleteEntity<Person>(x));
+                int doc = (await startupRunner.Delete<Person>(x));
                 Console.WriteLine("delete = " + doc);
             }
             startupRunner.BeginTransaction();
@@ -43,7 +43,7 @@ namespace ConsoleApp2
             for (int ndx = 0; ndx < 10; ndx++)
             {
                 Person vPerson = new Person();
-                int doc=(await startupRunner.AddNewEntity<Person>(vPerson));
+                int doc=(await startupRunner.AddNew<Person>(vPerson));
                 Console.WriteLine("i = " + ndx);
 
                 Console.WriteLine("insert = "+ doc);
@@ -55,7 +55,7 @@ namespace ConsoleApp2
                 i++;
                 Console.WriteLine(i + "  ---->  " + x.Id);
                 x.Name = "update " + i;
-                int doc = (await startupRunner.UpdateEntity<Person>(x));
+                int doc = (await startupRunner.Update<Person>(x));
                 Console.WriteLine("update = " + doc);
             }
             startupRunner.Writeable = true;
