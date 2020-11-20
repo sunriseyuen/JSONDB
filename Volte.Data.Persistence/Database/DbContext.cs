@@ -20,6 +20,7 @@ namespace Volte.Data.Dapper
         private ISerializer _serializer;
         private IDbConnection _Connection;
         private IDbTransaction _Transaction;
+        const string JSON_FIELD_NAME= "Contents";
 
         public DbContext(IServiceProvider serviceProvider, ISerializer serializer, IConfiguration config)
         {
@@ -57,13 +58,6 @@ namespace Volte.Data.Dapper
             }
             this.Dispose();
         }
-        /// <summary>
-        /// 修改
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dbs"></param>
-        /// <param name="sql">按条件修改</param>
-        /// <returns></returns>
         public async Task<int> AddNewEntity<T>(IDataObject entity) where T : class, new()
         {
             ObjectProperty _ObjectProperty = ObjectPropertyMaps.Build<T>();
@@ -81,9 +75,7 @@ namespace Volte.Data.Dapper
             }
             Serializer.JsonSerializer serializer = new Serializer.JsonSerializer();
 
-            defaultValues["sKey"] = entity.sKey;
-            defaultValues["sCorporation"] = entity.sCorporation;
-            defaultValues["Contents"] = serializer.Serialize(entity);
+            defaultValues[JSON_FIELD_NAME] = serializer.Serialize(entity);
 
             SqlResult sqlResult = _connectionProvider.Compiler.Compile(query.AsInsert(defaultValues));
 
@@ -96,13 +88,6 @@ namespace Volte.Data.Dapper
             
             return result;
         }
-        /// <summary>
-        /// 修改
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dbs"></param>
-        /// <param name="sql">按条件修改</param>
-        /// <returns></returns>
         public async Task<bool> UpdateEntity<T>(IDataObject entity) where T : class, new()
         {
             Query query; 
