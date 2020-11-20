@@ -20,7 +20,7 @@ namespace Volte.Data.Dapper
         private ISerializer _serializer;
         private IDbConnection _Connection;
         private IDbTransaction _Transaction;
-        const string JSON_FIELD_NAME= "Contents";
+        const string DEF_JSON_FIELD_NAME= "Contents";
 
         public DbContext(IServiceProvider serviceProvider, ISerializer serializer, IConfiguration config)
         {
@@ -75,7 +75,7 @@ namespace Volte.Data.Dapper
             }
             Serializer.JsonSerializer serializer = new Serializer.JsonSerializer();
 
-            defaultValues[JSON_FIELD_NAME] = serializer.Serialize(entity);
+            defaultValues[DEF_JSON_FIELD_NAME] = serializer.Serialize(entity);
 
             SqlResult sqlResult = _connectionProvider.Compiler.Compile(query.AsInsert(defaultValues));
 
@@ -133,11 +133,11 @@ namespace Volte.Data.Dapper
                         query.Where(item.ColumnName, value);
                     }
                 }
-                if (item.ColumnName == JSON_FIELD_NAME)
+                if (item.ColumnName == DEF_JSON_FIELD_NAME)
                 {
                     Serializer.JsonSerializer serializer = new Serializer.JsonSerializer();
 
-                    defaultValues[JSON_FIELD_NAME] = serializer.Serialize(entity);
+                    defaultValues[DEF_JSON_FIELD_NAME] = serializer.Serialize(entity);
                 }
             }
             SqlResult sqlResult = _connectionProvider.Compiler.Compile(query.AsUpdate(defaultValues));
