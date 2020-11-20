@@ -29,16 +29,19 @@ namespace ConsoleApp2
             // Run startup actions (not needed when registering Elsa with a Host).
             var startupRunner = svc.GetRequiredService<IDbContext>();
             startupRunner.Open("master");
-            //startupRunner.BeginTransaction();
+            startupRunner.BeginTransaction();
 
-            for (int i = 0; i < 10; i++)
+            for (int ndx = 0; ndx < 10; ndx++)
             {
                 Person vPerson = new Person();
-                startupRunner.AddNewEntity<Person>(vPerson);
+                int doc=(await startupRunner.AddNewEntity<Person>(vPerson));
+
+                Console.WriteLine("x = "+ doc);
+                Console.WriteLine("i = "+ndx);
             }
 
-            //startupRunner.Writeable = true;
-            //startupRunner.Commit();
+            startupRunner.Writeable = true;
+            startupRunner.Commit();
             Console.WriteLine("OK,press any key to exit");
             Console.ReadLine();
         }

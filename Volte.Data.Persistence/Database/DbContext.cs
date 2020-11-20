@@ -94,6 +94,7 @@ namespace Volte.Data.Dapper
               sqlResult.NamedBindings,
               _Transaction,
               this.CommandTimeout));
+            
             return result;
         }
         /// <summary>
